@@ -16,6 +16,6 @@ Help Pacman agent to find paths through his maze world, both to reach a particul
 
 ## Project 2: Adversarial Search
 
-## Project 3: Reinforcement learning
+## Project 3: Reinforcement Learning
 
 ## Project 4: Probabilistic inference 
