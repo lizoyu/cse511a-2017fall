@@ -13,7 +13,7 @@
 3. Implement the **uniform-cost graph search** algorithm in the *uniformCostSearch* function in `search.py`.
 - scores: 2 / 2
 
-4. Implement **A* graph search** in the empty function *aStarSearch* in `search.py`.
+4. Implement **A\* graph search** in the empty function *aStarSearch* in `search.py`.
 - scores: 3 / 3
 
 5. Implement the *CornersProblem* search problem in `searchAgents.py`.
