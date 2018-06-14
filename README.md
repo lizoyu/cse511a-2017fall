@@ -10,7 +10,7 @@ Help Pacman agent to find paths through his maze world, both to reach a particul
 3. Uniform-cost graph search
 4. A* graph search
 5. Implement a search problem *CornersProblem*
-6. Implement a consistent, non-trivial heuristic for *CornersProblem*s
+6. Implement a consistent, non-trivial heuristic for *CornersProblem*
 7. Implement a consistent, non-trivial heuristic for *FoodSearchProblem*
 8. Suboptimal search
 
