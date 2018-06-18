@@ -4,6 +4,8 @@
 - searchAgents.py
 
 ### Questions
+Total score: 20 / 20
+
 1. Implement the **depth-first search** (DFS) algorithm in the *depthFirstSearch* function in `search.py`.
 - scores: 2 / 2
 
