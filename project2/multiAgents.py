@@ -22,7 +22,6 @@ class ReflexAgent(Agent):
     headers.
   """
 
-
   def getAction(self, gameState):
     """
     You do not need to change this method, but you're welcome to.
@@ -42,7 +41,6 @@ class ReflexAgent(Agent):
     chosenIndex = random.choice(bestIndices) # Pick randomly among the best
 
     "Add more of your code here if you want to"
-
     return legalMoves[chosenIndex]
 
   def evaluationFunction(self, currentGameState, action):
@@ -68,7 +66,6 @@ class ReflexAgent(Agent):
     newPos = successorGameState.getPacmanPosition()
     newFood = successorGameState.getFood()
     newGhostStates = successorGameState.getGhostStates()
-    #newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
     "*** YOUR CODE HERE ***"
     foods = newFood.asList()
     # if foods are empty
@@ -141,24 +138,29 @@ class MinimaxAgent(MultiAgentSearchAgent):
     Your minimax agent (question 2)
   """
   def maxValue(self, gameState, level):
+    # evaluate if reach leaf or game over
     if level == self.depth or gameState.isWin() or gameState.isLose():
         return self.evaluationFunction(gameState)
 
     actions = gameState.getLegalActions(0)
     actions.remove('Stop')
+    # get the max evaluation value of valid actions
     return max(self.minValue(gameState.generateSuccessor(0, action),
                             1, level) for action in actions)
 
   def minValue(self, gameState, ghost_id, level):
+    # evaluate if reach leaf or game over
     if level == self.depth or gameState.isWin() or gameState.isLose():
         return self.evaluationFunction(gameState)
 
     v = float('inf')
     actions = gameState.getLegalActions(ghost_id)
     for action in actions:
+        # loop through the ghost
         if ghost_id < gameState.getNumAgents()-1:
             v = min(v, self.minValue(
                 gameState.generateSuccessor(ghost_id, action), ghost_id+1, level))
+        # now is the Pacman's turn! (next round)
         else:
             v = min(v, self.maxValue(
                 gameState.generateSuccessor(ghost_id, action), level+1))
@@ -188,6 +190,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
     actions = gameState.getLegalActions(0)
     actions.remove('Stop')
     
+    # get the action with the max value
     actions_val = {action: self.minValue(gameState.generateSuccessor(0, action), 1, 0)
                     for action in actions}
     return max(actions_val, key=actions_val.get)
@@ -197,15 +200,18 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     Your minimax agent with alpha-beta pruning (question 3)
   """
   def maxValue(self, gameState, level, a, b):
+    # evaluate if reach leaf or game over
     if level == self.depth or gameState.isWin() or gameState.isLose():
         return self.evaluationFunction(gameState)
 
     actions = gameState.getLegalActions(0)
     actions.remove('Stop')
     v = float('-inf')
+    # get the max evaluation value of valid actions
     for action in actions:
         v = max(v, self.minValue(
                 gameState.generateSuccessor(0, action), 1, level, a, b))
+        # if 
         if v >= b:
             return v
         a = max(a, v)
