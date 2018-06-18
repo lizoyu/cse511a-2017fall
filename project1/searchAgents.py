@@ -290,12 +290,13 @@ class CornersProblem(search.SearchProblem):
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                # if next position is a corner, update the unexplored corners
+                # if next position is a corner, exclude it from unexplored corners
                 if (nextx, nexty) in unexplored_corners:
                     updated_corners = list(unexplored_corners)
                     updated_corners.remove((nextx, nexty))
                     successors.append(
                         (((nextx, nexty), tuple(updated_corners)), action, 1))
+                # if it's not a corner, then carry on
                 else:
                     successors.append((((nextx, nexty), unexplored_corners), action, 1))
 
@@ -333,12 +334,14 @@ def cornersHeuristic(state, problem):
 
     "*** YOUR CODE HERE ***"
     position, unexplored_corners = state
+    # if all corners are cleared, we win! -> 0 cost
     if not unexplored_corners:
         return 0
 
     unexplored_corners = list(unexplored_corners)
     unexplored_corners.append(position)
     distance = 0
+    # greedy: find the closest corner by Manhattan distance
     while len(unexplored_corners) > 1:
         next_state = unexplored_corners.pop()
         distance_cost = {corner:util.manhattanDistance(next_state, corner) for corner in unexplored_corners}
@@ -437,9 +440,11 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     foods = foodGrid.asList()
+    # if no foods, win! -> 0 cost
     if not foods:
         return 0
 
+    # return the distance to the farthest food
     return max(mazeDistance(position, food, problem.startingGameState) for food in foods)
 
 class ClosestDotSearchAgent(SearchAgent):
