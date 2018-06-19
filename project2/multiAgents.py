@@ -211,25 +211,32 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     for action in actions:
         v = max(v, self.minValue(
                 gameState.generateSuccessor(0, action), 1, level, a, b))
-        # if 
+        # if the value is greater than previous choice, then stop,
+        # the above min node would not choose it anyway
         if v >= b:
             return v
         a = max(a, v)
     return v
 
   def minValue(self, gameState, ghost_id, level, a, b):
+    # evaluate if reach leaf or game over
     if level == self.depth or gameState.isWin() or gameState.isLose():
         return self.evaluationFunction(gameState)
 
     actions = gameState.getLegalActions(ghost_id)
     v = float('inf')
+    # get the min evaluation value of valid actions
     for action in actions:
+        # loop through each ghost
         if ghost_id < gameState.getNumAgents()-1:
             v = min(v, self.minValue(
                 gameState.generateSuccessor(ghost_id, action), ghost_id+1, level, a, b))
+            # if the value is smaller than previous choice, then stop,
+            # the above max node would not choose it anyway
             if v <= a:
                 return v
             b = min(b, v)
+        # now is the Pacman's turn! (next round) 
         else:
             v = min(v, self.maxValue(
                     gameState.generateSuccessor(ghost_id, action), level+1, a, b))
@@ -249,6 +256,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     v = float('-inf')
     act = None
     a = float('-inf'); b = float('inf')
+    # start with a max node
     for action in actions:
         val = self.minValue(
             gameState.generateSuccessor(0, action), 1, 0, a, b)
@@ -266,23 +274,30 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
   """
 
   def maxValue(self, gameState, level):
+    # evaluate if reach leaf or game over
     if level == self.depth or gameState.isWin() or gameState.isLose():
         return self.evaluationFunction(gameState)
 
     actions = gameState.getLegalActions(0)
     actions.remove('Stop')
+    # get the max value
     return max(self.minValue(gameState.generateSuccessor(0, action),
                             1, level) for action in actions)
 
   def minValue(self, gameState, ghost_id, level):
+    # evaluate if reach leaf or game over
     if level == self.depth or gameState.isWin() or gameState.isLose():
         return self.evaluationFunction(gameState)
 
     actions = gameState.getLegalActions(ghost_id)
+    # loop through each ghost
     if ghost_id < gameState.getNumAgents()-1:
+        # get the expected value of all actions (expectation)
         return sum(self.minValue(
             gameState.generateSuccessor(ghost_id, action), ghost_id+1, level) for action in actions)/len(actions)
+    # now is the Pacman's turn! (next round) 
     else:
+        # get the expected value of all actions (expectation)
         return sum(self.maxValue(
             gameState.generateSuccessor(ghost_id, action), level+1) for action in actions)/len(actions)
 
@@ -310,8 +325,10 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     actions = gameState.getLegalActions(0)
     actions.remove('Stop')
     
+    # start with a max node
     actions_val = {action: self.minValue(gameState.generateSuccessor(0, action), 1, 0)
                     for action in actions}
+    # return the action with the max value
     return max(actions_val, key=actions_val.get)
 
 def betterEvaluationFunction(currentGameState):
@@ -330,6 +347,7 @@ def betterEvaluationFunction(currentGameState):
                     - in normal mode, prefer longer distance
   """
   "*** YOUR CODE HERE ***"
+  # lose, bad! Win, good!
   if currentGameState.isLose():
       return -10000
   if currentGameState.isWin():
@@ -352,7 +370,7 @@ def betterEvaluationFunction(currentGameState):
   else:
       score = 1.0/distance
 
-  # few foods, better
+  # fewer foods, better
   score -= len(foods)**2
 
   # see how far the ghosts are
