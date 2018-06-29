@@ -42,10 +42,13 @@ class ValueIterationAgent(ValueEstimationAgent):
     states = mdp.getStates()
     states.pop(0)
     new_values = util.Counter()
+    # update policy by indicated number of iterations
     for i in range(iterations):
     	for state in states:
+        # compute utility (Bellman equation) for each possible action
     		val = {action: sum(prob*(mdp.getReward(state, action, nextState) + discount*self.values[nextState]) for nextState, prob in mdp.getTransitionStatesAndProbs(state, action)) 
     				for action in mdp.getPossibleActions(state)}
+        # get & record the action with maximum utility
     		self.actions[state] = max(val, key=val.get)
     		new_values[state] = val[self.actions[state]]
     		for action, value in val.items():
