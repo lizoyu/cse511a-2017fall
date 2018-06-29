@@ -46,5 +46,5 @@ Design Pac-Man agents that use sensors to locate and eat invisible ghosts.
 2. Exact inference: moving
 3. Greedy action
 4. Particle filtering
-5. Joint particle filtering: Bayes network #1
-6. Joint particle filtering: Bayes network #2
+5. Joint particle filtering: Bayesian network #1
+6. Joint particle filtering: Bayesian network #2
